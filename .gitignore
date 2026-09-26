@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+coverage/

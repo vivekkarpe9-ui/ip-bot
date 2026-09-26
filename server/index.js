@@ -12,7 +12,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,email TEXT UNIQUE 
 app.use(helmet()); app.use(cors({origin:process.env.APP_ORIGIN||true,credentials:true})); app.use(express.json({limit:'1mb'})); app.use(cookieParser());
 const now=()=>new Date().toISOString(); const id=()=>crypto.randomUUID();
 function requireOwner(req,res,next){if(req.headers['x-owner-key']!==process.env.OWNER_API_KEY)return res.status(401).json({error:'owner authorization required'});next()}
-app.get('/',(req,res)=>res.status(200).json({service:'iP Bot',status:'online',message:'iP Bot API is running',health:'/api/health'}));
+app.get('/',(req,res)=>res.sendFile(process.cwd()+'/app/index.html'));
 app.get('/api/health',(req,res)=>res.json({ok:true,service:'ip-bot',time:now()}));
 app.get('/api/me',requireOwner,(req,res)=>res.json({role:'owner',authenticated:true}));
 app.post('/api/jobs',requireOwner,(req,res)=>{const job={id:id(),owner_id:'owner',type:String(req.body.type||'general'),status:'queued',payload:JSON.stringify(req.body.payload||{}),created_at:now(),updated_at:now()};db.prepare('INSERT INTO jobs VALUES(@id,@owner_id,@type,@status,@payload,@created_at,@updated_at)').run(job);res.status(202).json(job)});

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#071114" />
+  <title>iP Bot — Business OS</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div><span class="brand-dot"></span><strong>iP Bot</strong><small>Business OS</small></div>
+      <button class="icon-btn" aria-label="Notifications">⌁</button>
+    </header>
+
+    <main>
+      <section class="hero card">
+        <div><p class="eyebrow">MASTER AGENT</p><h1>Good to see you.</h1><p class="muted">Your teams are ready. What should iP Bot work on?</p></div>
+        <button class="primary" onclick="createRoom()">＋ New Work Room</button>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat card"><span>Active Rooms</span><b id="roomCount">8</b><small>+2 this week</small></div>
+        <div class="stat card"><span>Agents Working</span><b>24</b><small>7 active now</small></div>
+        <div class="stat card"><span>Pending Tasks</span><b>18</b><small>4 need approval</small></div>
+      </section>
+
+      <section class="section-head"><h2>Work Rooms</h2><button onclick="createRoom()">View all</button></section>
+      <section id="rooms" class="rooms-grid"></section>
+
+      <section class="section-head"><h2>Agent Activity</h2><button>Open log</button></section>
+      <section class="activity card">
+        <div><i class="pulse"></i><span><b>Finance Agent</b> updated Solar P&L</span><time>2m</time></div>
+        <div><i class="pulse"></i><span><b>Research Agent</b> completed Travel market scan</span><time>8m</time></div>
+        <div><i class="pulse"></i><span><b>Marketing Agent</b> prepared 3 campaign drafts</span><time>14m</time></div>
+      </section>
+
+      <section class="approval card"><div><p class="eyebrow">APPROVAL CENTRE</p><h2>4 actions need you</h2><p class="muted">Agents can prepare work, but consequential actions stay under your control.</p></div><button class="secondary">Review</button></section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="active">⌂<span>Home</span></button><button>▦<span>Rooms</span></button><button>◈<span>Agents</span></button><button>✓<span>Tasks</span></button><button>⚙<span>Settings</span></button>
+    </nav>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -22,5 +22,5 @@ app.post('/api/approvals/:id/:decision',requireOwner,(req,res)=>{const decision=
 app.get('/api/approvals',requireOwner,(req,res)=>res.json(db.prepare('SELECT * FROM approvals ORDER BY created_at DESC LIMIT 100').all()));
 app.post('/api/ledger',requireOwner,(req,res)=>{const amount=Number(req.body.amount);if(!Number.isFinite(amount)||amount<=0)return res.status(400).json({error:'positive amount required'});const row={id:id(),owner_id:'owner',type:String(req.body.type||'adjustment'),amount,currency:String(req.body.currency||'INR'),reference:req.body.reference||null,created_at:now()};db.prepare('INSERT INTO ledger VALUES(@id,@owner_id,@type,@amount,@currency,@reference,@created_at)').run(row);res.status(201).json(row)});
 app.get('/api/ledger',requireOwner,(req,res)=>res.json(db.prepare('SELECT * FROM ledger ORDER BY created_at DESC LIMIT 200').all()));
-app.use(express.static('app'));
+app.use(express.static('.'));
 const port=Number(process.env.PORT||3000);app.listen(port,()=>console.log(`iP Bot server listening on ${port}`));

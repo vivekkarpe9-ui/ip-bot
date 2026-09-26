@@ -1,0 +1,7 @@
+{
+  "name":"ip-bot-server",
+  "private":true,
+  "type":"module",
+  "scripts":{"start":"node index.js","worker":"node worker.js"},
+  "dependencies":{"better-sqlite3":"latest","cookie-parser":"latest","cors":"latest","express":"latest","helmet":"latest"}
+}

@@ -13,7 +13,7 @@
       <div><span class="brand-dot"></span><strong>iP Bot</strong><small>Business OS</small></div>
       <button class="icon-btn" aria-label="Notifications">⌁</button>
     </header>
-    <main id="app-main">
+    <main>
       <section class="hero card">
         <div><p class="eyebrow">MASTER AGENT</p><h1>Good to see you.</h1><p class="muted">Your teams are ready. What should iP Bot work on?</p></div>
         <button class="primary" onclick="createRoom()">＋ New Work Room</button>
@@ -25,16 +25,16 @@
       </section>
       <section class="section-head"><h2>Work Rooms</h2><button onclick="createRoom()">＋ New</button></section>
       <section id="rooms" class="rooms-grid"></section>
-      <section class="section-head"><h2>Agent Activity</h2><button onclick="showActivity()">Open log</button></section>
-      <section class="activity card" id="activity-log">
+      <section class="section-head"><h2>Agent Activity</h2><button>Open log</button></section>
+      <section class="activity card">
         <div><i class="pulse"></i><span><b>Finance Agent</b> updated Solar P&L</span><time>2m</time></div>
         <div><i class="pulse"></i><span><b>Research Agent</b> completed Travel market scan</span><time>8m</time></div>
         <div><i class="pulse"></i><span><b>Marketing Agent</b> prepared 3 campaign drafts</span><time>14m</time></div>
       </section>
-      <section class="approval card"><div><p class="eyebrow">APPROVAL CENTRE</p><h2>4 actions need you</h2><p class="muted">Agents can prepare work, but consequential actions stay under your control.</p></div><button class="secondary" onclick="showApprovals()">Review</button></section>
+      <section class="approval card"><div><p class="eyebrow">APPROVAL CENTRE</p><h2>4 actions need you</h2><p class="muted">Agents can prepare work, but consequential actions stay under your control.</p></div><button class="secondary">Review</button></section>
     </main>
-    <nav class="bottom-nav" aria-label="Primary navigation">
-      <button class="active" onclick="showHome()">⌂<span>Home</span></button><button onclick="showRooms()">▦<span>Rooms</span></button><button onclick="showAgents()">◈<span>Agents</span></button><button onclick="showTasks()">✓<span>Tasks</span></button><button onclick="showSettings()">⚙<span>Settings</span></button>
+    <nav class="bottom-nav">
+      <button class="active">⌂<span>Home</span></button><button>▦<span>Rooms</span></button><button>◈<span>Agents</span></button><button>✓<span>Tasks</span></button><button>⚙<span>Settings</span></button>
     </nav>
   </div>
   <script src="./app.js"></script>

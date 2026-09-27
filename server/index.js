@@ -10,7 +10,9 @@ import { fileURLToPath } from 'node:url';
 const __filename=fileURLToPath(import.meta.url);
 const __dirname=path.dirname(__filename);
 const app=express();
-const db=new Database(process.env.DB_PATH||'./ipbot.sqlite');
+const isVercel=Boolean(process.env.VERCEL);
+const dbPath=process.env.DB_PATH||(isVercel?'/tmp/ipbot.sqlite':'./ipbot.sqlite');
+const db=new Database(dbPath);
 db.pragma('journal_mode=WAL');
 db.exec(`CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,email TEXT UNIQUE NOT NULL,role TEXT NOT NULL DEFAULT 'customer',created_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS agents(id TEXT PRIMARY KEY,name TEXT NOT NULL,email TEXT UNIQUE NOT NULL,status TEXT NOT NULL DEFAULT 'pending',created_at TEXT NOT NULL,updated_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY,owner_id TEXT NOT NULL,type TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'queued',payload TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS approvals(id TEXT PRIMARY KEY,owner_id TEXT NOT NULL,agent_id TEXT,type TEXT NOT NULL,amount REAL DEFAULT 0,status TEXT NOT NULL DEFAULT 'pending',payload TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS ledger(id TEXT PRIMARY KEY,owner_id TEXT NOT NULL,type TEXT NOT NULL,amount REAL NOT NULL,currency TEXT NOT NULL DEFAULT 'INR',reference TEXT,created_at TEXT NOT NULL);`);
 app.use(helmet()); app.use(cors({origin:process.env.APP_ORIGIN||true,credentials:true})); app.use(express.json({limit:'1mb'})); app.use(cookieParser());
@@ -19,6 +21,7 @@ function requireOwner(req,res,next){if(req.headers['x-owner-key']!==process.env.
 app.get('/',(req,res)=>res.sendFile(path.join(__dirname,'dashboard.html')));
 app.get('/dashboard.js',(req,res)=>res.sendFile(path.join(__dirname,'dashboard.js'),{headers:{'Content-Type':'application/javascript; charset=utf-8','Cache-Control':'no-store'}}));
 app.get('/api/health',(req,res)=>res.json({ok:true,service:'ip-bot',time:now()}));
+app.get('/api/system',requireOwner,(req,res)=>res.json({ok:true,platform:isVercel?'vercel':'node',storage:'sqlite',dbPath:dbPath,persistent:!isVercel,warning:isVercel?'SQLite on Vercel is temporary; connect a managed database before production data is relied upon.':null}));
 app.get('/api/me',requireOwner,(req,res)=>res.json({role:'owner',authenticated:true}));
 app.post('/api/agents',requireOwner,(req,res)=>{const name=String(req.body.name||'').trim(),email=String(req.body.email||'').trim().toLowerCase();if(!name||!email)return res.status(400).json({error:'name and email required'});const a={id:id(),name,email,status:'pending',created_at:now(),updated_at:now()};try{db.prepare('INSERT INTO agents VALUES(@id,@name,@email,@status,@created_at,@updated_at)').run(a)}catch(e){return res.status(409).json({error:'agent email already exists'})}res.status(201).json(a)});
 app.get('/api/agents',requireOwner,(req,res)=>res.json(db.prepare('SELECT * FROM agents ORDER BY created_at DESC LIMIT 200').all()));

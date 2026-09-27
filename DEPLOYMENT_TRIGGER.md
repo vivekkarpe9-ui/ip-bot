@@ -1,5 +1,7 @@
 # Production deployment trigger
 
-Vercel production environment configuration was updated by the owner. This commit exists to trigger the connected `main` branch deployment.
+Vercel production deployment trigger for the iP Bot workflow/dashboard fixes.
+
+Latest fixes: durable Saving Account execution, job details/result handling, and rebuilt dashboard interactions.
 
 Secrets remain managed only in Vercel Environment Variables.

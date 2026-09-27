@@ -17,6 +17,8 @@ app.use(helmet()); app.use(cors({origin:process.env.APP_ORIGIN||true,credentials
 const now=()=>new Date().toISOString(); const id=()=>crypto.randomUUID();
 function requireOwner(req,res,next){if(req.headers['x-owner-key']!==process.env.OWNER_API_KEY)return res.status(401).json({error:'owner authorization required'});next()}
 app.get('/',(req,res)=>res.sendFile(path.join(__dirname,'dashboard.html')));
+// Explicitly expose the dashboard client script. This is required for Vercel's Express function packaging.
+app.get('/dashboard.js',(req,res)=>res.sendFile(path.join(__dirname,'dashboard.js'),{headers:{'Content-Type':'application/javascript; charset=utf-8','Cache-Control':'no-store'}}));
 app.get('/api/health',(req,res)=>res.json({ok:true,service:'ip-bot',time:now()}));
 app.get('/api/me',requireOwner,(req,res)=>res.json({role:'owner',authenticated:true}));
 app.post('/api/jobs',requireOwner,(req,res)=>{const job={id:id(),owner_id:'owner',type:String(req.body.type||'general'),status:'queued',payload:JSON.stringify(req.body.payload||{}),created_at:now(),updated_at:now()};db.prepare('INSERT INTO jobs VALUES(@id,@owner_id,@type,@status,@payload,@created_at,@updated_at)').run(job);res.status(202).json(job)});
